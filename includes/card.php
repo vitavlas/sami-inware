@@ -1,14 +1,16 @@
 <?php
-// formatted post time
-$date = new DateTime($row['created_at']);
-$formatted_date = $date->format('d.m.Y');
-$formatted_time = $date->format('H:i');
+// format date
+$date_created = new DateTime($row['created_at']);
+$date_updated = new DateTime($row['updated_at']);
+
+$formatted_date_created = $date_created->format('d.m.Y');
+$formatted_date_updated = $date_updated->format('d.m.Y');
 ?>
 
 <article class="card">
     <div class="card-wrapper">
         <div class="card-avatar">
-            <img src="https://placehold.co/64x64?text=tuote" width="64" height="64" alt="User profile avatar">
+            <img src="https://placehold.co/64x64?text=tuote" width="64" height="64" alt="Tuotekuva">
         </div>
         <div class="card-section">
             <h3 class="card-title"><?= htmlspecialchars($row['name']) ?></h3>
@@ -32,15 +34,15 @@ $formatted_time = $date->format('H:i');
                 <div class="info-item">
                     <i class="fa-regular fa-calendar"></i>
                     <span class="info-label">Lisätty: </span>
-                    <time datetime="<?= htmlspecialchars($row['created_at']) ?>">
-                        <?= htmlspecialchars($row['created_at']) ?>
+                    <time datetime="<?= htmlspecialchars($formatted_date_created) ?>">
+                        <?= htmlspecialchars($formatted_date_created) ?>
                     </time>
                 </div>
                 <div class="info-item">
                     <i class="fa-regular fa-clock"></i>
                     <span class="info-label">Päivitetty: </span>
-                    <time datetime="<?= htmlspecialchars($row['updated_at']) ?>">
-                        <?= htmlspecialchars($row['updated_at']) ?>
+                    <time datetime="<?= htmlspecialchars($formatted_date_updated) ?>">
+                        <?= htmlspecialchars($formatted_date_updated) ?>
                     </time>
                 </div>
             </div>

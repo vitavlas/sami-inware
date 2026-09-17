@@ -62,7 +62,7 @@
         </a>
     </header>
     
-  <nav>
+  <nav class="sidebar-navigation">
     <ul class="navigation">
       <li>
         <a href="index.php?page=home" class="navigation-link">Aloitus</a>
@@ -74,4 +74,15 @@
       </li>
     </ul>
   </nav>
+
+  <?php if (!empty($_SESSION['user_name'])): ?>
+
+  <div class="sidebar-footer">
+    <form class="logout-form" action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=logout" method="POST" name="form-logout">
+        <button class="form-button" type="submit">Kirjaudu ulos</button>
+    </form>
+  </div>
+
+  <?php endif; ?>
+
 </aside>

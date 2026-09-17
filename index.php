@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 /* ==== CONFIG ===== */
 
 define('BASE_PATH', __DIR__);
@@ -18,4 +20,9 @@ require_once BASE_PATH . '/config/database.php';
 
 /* ==== APP LAYOUT ===== */
 
-require_once BASE_PATH . '/includes/main.php';
+if ($page === 'login') {
+    require_once BASE_PATH . '/includes/login.php';
+} else {
+    require_once BASE_PATH . '/includes/main.php';
+}
+
