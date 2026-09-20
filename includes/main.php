@@ -15,9 +15,9 @@
 
         <?php include_once BASE_PATH . '/includes/sidebar.php'; ?>
 
-      <main class="main">
         <div class="content">
-            <?php
+            <main class="main">
+                <?php
                 // content
                 if (array_key_exists($page, $routes)) {
                     include_once $routes[$page];
@@ -26,11 +26,11 @@
                     echo "Haluamaasi sivua ei löytynyt.";
                 }
             ?>
+            </main>
+      
+            <?php include_once BASE_PATH . '/includes/footer.php'; ?>
+      
         </div>
-      </main>
-
-        <?php include_once BASE_PATH . '/includes/footer.php'; ?>
-
     </div>
   </body>
 </html>

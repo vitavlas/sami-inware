@@ -31,21 +31,19 @@ body {
 
 .app-layout {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  grid-template-rows: 1fr auto;
-  grid-template-areas: 
-    "sidebar main"
-    "sidebar footer";
-    
+  grid-template-columns: 280px minmax(0, 1fr);
   height: 100vh;
   overflow: hidden;
+  grid-template-areas: "sidebar content";
+    
 }
 
 /* Sidebar */
 
 .sidebar {
   grid-area: sidebar;
-  height: 100vh;
+  height: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding-inline: 0.5rem;
@@ -61,6 +59,9 @@ body {
   flex: 1;
 }
 
+.sidebar-footer {
+  margin-bottom: 2rem;
+}
 
 /* Logo */
 
@@ -90,23 +91,25 @@ body {
 /* Main */
 
 .main {
-  grid-area: main;
-  height: 100vh;
-  overflow-y: auto;
-  padding-bottom: 2rem;
+  min-width: 0;
+  margin-bottom: 2rem;
   background-color: var(--bg-primary);
 }
 
 .content {
-  width: 100%;
-  max-width: 1200px;
+  grid-area: content;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-rows: auto auto;
   padding: 0 2rem;
 }
 
 /* Footer */
 
 .footer {
-  grid-area: footer;
+  /* grid-area: footer; */
 }
 
 .footer-inner {
