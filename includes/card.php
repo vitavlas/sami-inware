@@ -47,6 +47,9 @@ $formatted_date_updated = $date_updated->format('d.m.Y');
                 </div>
             </div>
         </div>
+
+        <?php if (($_SESSION['user_role'] ?? '') === 'admin'): ?>
+
         <div class="card-actions">
             <a class="action-link" href="index.php?page=update-item&product-id=<?= htmlspecialchars($row['id']) ?>">
                 <i class="fa-regular fa-pen-to-square"></i>
@@ -57,5 +60,7 @@ $formatted_date_updated = $date_updated->format('d.m.Y');
                  Poista
             </a>
         </div>
+
+        <?php endif; ?>
     </div>
 </article>

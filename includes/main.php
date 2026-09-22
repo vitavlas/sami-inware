@@ -20,13 +20,8 @@
             <main class="main">
                 <?php
                 // content
-                if (array_key_exists($page, $routes)) {
-                    include_once $routes[$page];
-                } else {
-                    http_response_code(404);
-                    echo "Haluamaasi sivua ei löytynyt.";
-                }
-            ?>
+                include_once $routes[$page]['file'];
+                ?>
             </main>
       
             <?php include_once BASE_PATH . '/includes/footer.php'; ?>

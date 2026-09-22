@@ -1,26 +1,26 @@
 <section class="post-form">
-    <h2 class="section-title">Luo Uusi Julkaisu</h2>
+    <h2 class="section-title">Uusi tuote</h2>
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST'):
     // Validate form inputs
     $input_data = [
-        'author' => $_POST['post-author'] ?: '',
-        'post' => $_POST['post-message'] ?: '',
+        'name' => $_POST['product-name'] ?: '',
+        'desc' => $_POST['product-desc'] ?: '',
     ];
 
     $patterns = [
-        'author' => [
-            'label' => 'Nimimerkki',
+        'name' => [
+            'label' => 'Tuote',
             'type' => 'regex',
             'rule' => '/^[a-zA-Z0-9 \-]+$/',
-            'message' => 'Kelvoton nimimerkki',
+            'message' => 'Tuotenimi ei voi olla tyhjä',
         ],
-        'post' => [
-            'label' => 'Viesti',
+        'desc' => [
+            'label' => 'Tuotteen kuvaus',
             'type' => 'regex',
             'rule' => '/^(?!\s*$).+/',
-            'message' => 'Viesti ei voi olla tyhjä',
+            'message' => 'Tuotteen kuvaus puuttuu',
         ],
     ];
 
@@ -31,26 +31,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
 <!-- Form send status messages -->
 <?php
 if($validated['isValid']):
-    // Save new post to the DB
-    $author = $validated["data"]["author"];
-    $post_content = $validated["data"]["post"];
+    // Add new product in database
+    $product_name = $validated["data"]["name"];
+    $product_desc = $validated["data"]["desc"];
 
-    $query = "INSERT INTO posts (author, content) VALUES (?, ?)";
+    $query = "INSERT INTO products (name, description) VALUES (?, ?)";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ss", $author, $post_content);
+    mysqli_stmt_bind_param($stmt, "ss", $product_name, $product_desc);
 
     if (mysqli_stmt_execute($stmt)):
         $_POST = [];
 ?>
 
     <div class="alert alert-success">
-        <p>Julkaisu tallennettu onnistuneesti.</p>
+        <p>Tuote lisätty onnistuneesti.</p>
     </div>
 
     <?php else: ?>
 
     <div class="alert alert-error">
-        <p>Julkaisun tallennus epäonnistui. Yritä uudelleen.</p>
+        <p>Tuotteen lisääminen epäonnistui. Yritä uudelleen.</p>
     </div>
 
     <?php endif; ?>
@@ -72,22 +72,22 @@ if($validated['isValid']):
 
 <!-- Form -->
     <div class="form-wrapper">
-        <form action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=new-post" method="POST" name="add_post">
+        <form action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=add-item" method="POST" name="add_product">
             <div class="form-field">
-                <label class="form-label" for="post-author" >Nimimerkki</label>
+                <label class="form-label" for="product-name" >Tuote</label>
                 <input 
-                    class="form-input" type="text" id="post-author" name="post-author" 
-                    value="<?= htmlspecialchars($_POST['post-author'] ?? '') ?>" placeholder="Juzu Kvanttinen"
+                    class="form-input" type="text" id="product-name" name="product-name" 
+                    value="<?= htmlspecialchars($_POST['product-name'] ?? '') ?>" placeholder="Uusi tuote"
                 >
             </div>
     
             <div class="form-field">
-                <label class="form-label" for="post-message" >Viesti</label>
-                <textarea class="form-textarea" id="post-message" name="post-message" placeholder="Julkaisun sisältö..."
-                ><?= htmlspecialchars($_POST['post-message'] ?? '') ?></textarea>
+                <label class="form-label" for="product-desc" >Tuotteen kuvaus</label>
+                <textarea class="form-textarea" id="product-desc" name="product-desc" placeholder="Kuvaa tuotetta..."
+                ><?= htmlspecialchars($_POST['product-desc'] ?? '') ?></textarea>
             </div>
     
-            <button class="form-button" type="submit" >Julkaise</button>
+            <button class="form-button" type="submit" >Tallenna</button>
         </form>
     </div>
 

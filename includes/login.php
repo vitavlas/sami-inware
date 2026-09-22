@@ -34,8 +34,10 @@
         if (password_verify($auth_data['password'], $user['password'])) {
             $_SESSION['user_name'] = $user['username'];
             $_SESSION['user_role'] = $user['role'];
+            $redirect_uri = $_SESSION['redirect_after_login'] ?? 'index.php?page=home';
     
-            header('Location: index.php?page=home');
+            unset($_SESSION['redirect_after_login']);
+            header('Location: ' . $redirect_uri);
             exit;
         } else {
             $error_msg = 'Virheellinen salasana!';

@@ -41,7 +41,7 @@ if($validated['isValid']):
 
     $query = "UPDATE products SET name = ?, description = ? WHERE id = ?";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssi", $author, $post_content, $product_id);
+    mysqli_stmt_bind_param($stmt, "ssi", $product_name, $product_desc, $product_id);
 
     if (mysqli_stmt_execute($stmt)):
         $_POST = [];
