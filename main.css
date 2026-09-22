@@ -55,6 +55,7 @@ body {
 }
 
 .sidebar-header {
+  padding-block: 1rem;
   margin-bottom: 2.5rem;
 }
 
@@ -70,26 +71,27 @@ body {
 /* Logo */
 
 .logo {
-  display: block;
-  width: 120px;
-  height: 60px;
-  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--accent-purple);
+  font-style: inherit;
+  font-size: clamp(1.5rem, 1.318rem + 0.91vw, 2rem);
+  font-weight: 700;
+  transition: color 0.5s ease-out, transform 0.3s ease-out;
 
-  svg {
-    width: 100%;
-    height: 100%;
-    transition: transform 0.3s ease-out;
-
-    &:hover {
-      transform: scale(1.2);
-    }
+  &:hover {
+    transform: scale(1.1);
+    color: var(--text-light);
   }
-
-  /* img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  } */
+  
+  svg {
+    width: 120px;
+    height: 60px;
+    flex-shrink: 0;
+  }
 }
 
 /* Main */
@@ -123,7 +125,6 @@ body {
   padding: 1rem;
   background-color: var(--text-secondary);
   color: var(--bg-primary);
-  font-size: 0.875rem;
 }
 
 /* ===== Content ===== */
@@ -181,7 +182,7 @@ body {
 }
 
 .stat-value {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 1.159rem + 0.45vw, 1.5rem);
 }
 
 /* Status */
@@ -457,7 +458,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(-45deg, var(--accent-purple), var(--color-light));
+  background: url(img/warehouse-bg-wide.jpg) no-repeat left / cover;
+  /* background: linear-gradient(-45deg, var(--accent-purple), var(--color-light)); */
 }
 
 .auth-card {
@@ -474,15 +476,17 @@ body {
 }
 
 .auth-card > .logo {
-  display: block;
-  width: 220px;
-  height: 60px;
-  margin-bottom: 1rem;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  transform: none;
+  transition: none;
+
+  &:hover {
+    color: var(--accent-purple);
+  }
+
+  svg {
+    width: 220px;
+    height: 60px;
   }
 }
 

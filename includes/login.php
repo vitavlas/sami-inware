@@ -75,8 +75,8 @@
     <main class="auth">
         <section class="auth-card">
             <a href="#!" class="logo">
-                <!-- FIXME: -->
-                <img src="https://placehold.co/220x60?text=InWare" width="220" height="60" alt="InWare">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="warehouse"><polygon fill="#801b5d" points="16 1.9 2 8.36 2 30 30 30 30 8.36 16 1.9"></polygon><rect width="20" height="6" x="6" y="24" fill="#fff"></rect><rect width="20" height="6" x="6" y="18" fill="#d9dce1"></rect><rect width="20" height="6" x="6" y="12" fill="#fff"></rect></svg>
+                <span>InWare</span>
             </a>
 
             <h1 class="auth-title">Kirjautuminen</h1>
