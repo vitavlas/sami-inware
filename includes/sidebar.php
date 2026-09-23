@@ -23,6 +23,7 @@
 
   <div class="sidebar-footer">
     <form class="logout-form" action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=logout" method="POST" name="form-logout">
+        <p>Kirjautunut: <?= $_SESSION['user_name'] ?></p>
         <button class="action-button" type="submit">Kirjaudu ulos</button>
     </form>
   </div>

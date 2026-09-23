@@ -1,10 +1,24 @@
 <?php
+
+// Product count
+$query = "SELECT COUNT(*) AS product_count FROM products";
+$result = mysqli_query($conn, $query);
+$product_count = mysqli_fetch_assoc($result)['product_count'];
+
+// Category count
+$query = "SELECT COUNT(DISTINCT category) AS category_count FROM products";
+$result = mysqli_query($conn, $query);
+$category_count = mysqli_fetch_assoc($result)['category_count'];
+
+// Low stock
+$query = "SELECT COUNT(*) AS product_low_stock FROM products WHERE quantity <= 10";
+$result = mysqli_query($conn, $query);
+$product_low_stock = mysqli_fetch_assoc($result)['product_low_stock'];
+
+// All products from DB
 $query = "SELECT * FROM products";
 $result = mysqli_query($conn, $query);
 
-// FIXME:
-$product_count = 30;
-$product_low_stock = 2;
 ?>
 
 <section>
@@ -20,9 +34,16 @@ $product_low_stock = 2;
             <span class="stat-label">Vähissä:</span>
             <strong class="stat-value"><?= $product_low_stock ?></strong>
         </div>
+
+        <div class="stat">
+            <span class="stat-label">Kategoriat:</span>
+            <strong class="stat-value"><?= $category_count ?></strong>
+        </div>
     </div>
 
-    <!-- TODO: -->
+    <h2 class="section-title"> Kaikki tuotteet</h2>
+
+
     <div class="table-wrapper">
         <table class="table">
             <thead>

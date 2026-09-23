@@ -108,7 +108,7 @@ body {
   min-width: 0;
   overflow-y: auto;
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr auto;
 }
 
 /* Footer */
@@ -173,7 +173,6 @@ body {
 
 .stats {
   display: flex;
-  flex-direction: column;
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -297,8 +296,8 @@ body {
 }
 
 .card-avatar {
-  width: 4rem;
-  height: 4rem;
+  width: 128px;
+  height: 128px;
   flex-shrink: 0;
 
   img {

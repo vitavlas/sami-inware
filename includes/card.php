@@ -10,24 +10,24 @@ $formatted_date_updated = $date_updated->format('d.m.Y');
 <article class="card">
     <div class="card-wrapper">
         <div class="card-avatar">
-            <img src="https://placehold.co/64x64?text=tuote" width="64" height="64" alt="Tuotekuva">
+            <img src="https://placehold.co/128x128?text=tuote" width="128" height="128" alt="Tuotekuva">
         </div>
         <div class="card-section">
             <h3 class="card-title"><?= htmlspecialchars($row['name']) ?></h3>
             <p class="card-content"><?= htmlspecialchars($row['description']) ?></p>
             <div class="card-info">
                 <div class="info-item">
-                    <i class="fa-regular fa-calendar"></i>
+                    <i class="fa-solid fa-layer-group"></i>
                     <span class="info-label">Kategoria: </span>
                     <span class="info-value"><?= htmlspecialchars($row['category']) ?></span>
                 </div>
                 <div class="info-item">
-                    <i class="fa-regular fa-calendar"></i>
+                    <i class="fa-solid fa-calculator"></i>
                     <span class="info-label">Määrä: </span>
                     <span class="info-value"><?= htmlspecialchars($row['quantity']) ?></span>
                 </div>
                 <div class="info-item">
-                    <i class="fa-regular fa-calendar"></i>
+                    <i class="fa-solid fa-money-check-dollar"></i>
                     <span class="info-label">Hinta: </span>
                     <span class="info-value"><?= htmlspecialchars($row['price']) ?></span>
                 </div>
