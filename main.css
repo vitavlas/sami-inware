@@ -274,7 +274,7 @@ body {
   }
 }
 
-/* ===== FIXME: Card ===== */
+/* ===== Card ===== */
 
 .card-list {
   display: grid;
@@ -358,19 +358,19 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 250px;
-  margin-bottom: 2rem;
+  width: max(250px, 50%);
+  margin-block: 2rem;
   padding: 1rem;
-  background-color: var(--bg-primary);
+  border: 1px solid var(--text-dark);
   border-radius: 0.5rem;
 }
 
 .alert-error {
-  color: var(--alert);
+  color: var(--color-error);
 }
 
 .alert-success {
-  color: var(--success);
+  color: var(--color-success);
 }
 
 /* ===== Forms ===== */

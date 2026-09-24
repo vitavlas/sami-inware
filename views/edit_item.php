@@ -1,3 +1,14 @@
+<?php
+// FIXME: create DB table!
+$categories_allowed = [
+    'Metallimateriaalit',
+    'Rakennustarvikkeet',
+    'Työturvallisuus',
+    'Toimistotekniikka',
+    'Toimisto',
+];
+?>
+
 <section>
 
 <?php
@@ -5,8 +16,11 @@
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'):
     // Validate form inputs
-     $input_data = [
+      $input_data = [
         'name' => $_POST['product-name'] ?: '',
+        'category' => $_POST['product-category'] ?? '',
+        'quantity' => (int) $_POST['product-quantity'] ?: '',
+        'price' => (float) str_replace(',', '.', $_POST['product-price']) ?: '',
         'desc' => $_POST['product-desc'] ?: '',
     ];
 
@@ -14,8 +28,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
         'name' => [
             'label' => 'Tuote',
             'type' => 'regex',
-            'rule' => '/^[a-zA-Z0-9 \-]+$/',
+            'rule' => '/^[\p{L}0-9 \-]+$/u',
             'message' => 'Tuotenimi ei voi olla tyhjä',
+        ],
+        'category' => [
+            'label' => 'Kategoria',
+            'type' => 'in_array',
+            'rule' => $categories_allowed,
+            'message' => 'Väärä kategoria',
+        ],
+        'quantity' => [
+            'label' => 'Määrä',
+            'type' => 'regex',
+            'rule' => '/^[0-9]+$/',
+            'message' => 'Määrän tulee olla numero',
+        ],
+        'price' => [
+            'label' => 'Hinta',
+            'type' => 'regex',
+            'rule' => '/^\d+(?:[.,]\d{1,2})?$/',
+            'message' => 'Hinnan tulee olaa numero ',
         ],
         'desc' => [
             'label' => 'Tuotteen kuvaus',
@@ -29,19 +61,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
     $validated = validateInput($patterns, $sanitized);
 ?>
 
-    <h2 class="section-title"><?= htmlspecialchars($validated["data"]["author"]) ?> [ muokkaus tila ]</h2>
+    <h2 class="section-title"><?= htmlspecialchars($validated["data"]["name"]) ?> [ muokkaus tila ]</h2>
 
 <!-- Form send status messages -->
+
 <?php
 if($validated['isValid']):
     // Update post
     $product_id = (int) $_POST['product-id'];
     $product_name = $validated["data"]["name"];
+    $product_category = $validated["data"]["category"];
+    $product_quantity = $validated["data"]["quantity"];
+    $product_price = $validated["data"]["price"];
     $product_desc = $validated["data"]["desc"];
 
-    $query = "UPDATE products SET name = ?, description = ? WHERE id = ?";
+    $query = "UPDATE products SET name = ?, description = ?, category = ?, quantity = ?, price = ? WHERE id = ?";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssi", $product_name, $product_desc, $product_id);
+    mysqli_stmt_bind_param($stmt, "sssidi", $product_name, $product_desc, $product_category, $product_quantity, $product_price, $product_id);
 
     if (mysqli_stmt_execute($stmt)):
         $_POST = [];
@@ -93,8 +129,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
     <h2 class="section-title"><?= htmlspecialchars($row['name']) ?> [ muokkaus tila ]</h2>
 
 <!-- Form -->
+ 
 <div class="form-wrapper">
-    <form action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=update-product&product-id=<?= $product_id ?>" method="POST" name="update_product">
+    <form action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=update-item&product-id=<?= $product_id ?>" method="POST" name="update_product">
         <div class="form-field">
             <label class="form-label" for="product-name" >Tuote</label>
             <input 
@@ -102,6 +139,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
                 value="<?= htmlspecialchars($row['name']) ?>"
             >
         </div>
+
+                    <div class="form-field">
+                <label class="form-label" for="product-category" >Kategoria</label>
+
+                <?php if (in_array($row['category'], $categories_allowed)): ?>
+                
+                    <select class="form-input" name="product-category" id="product-category">
+
+                         <option value="" disabled>Valitse kategoria</option>
+
+    <?php foreach ($categories_allowed as $category): ?>
+
+        <option
+            value="<?= htmlspecialchars($category) ?>"
+            <?= $row['category'] === $category ? 'selected' : '' ?>
+        >
+            <?= htmlspecialchars($category) ?>
+        </option>
+
+    <?php endforeach; ?>
+
+                    </select>
+                <?php endif; ?>
+
+            </div>
+
+            <div class="form-field">
+                <label class="form-label" for="product-name" >Määrä</label>
+                <input 
+                    class="form-input" type="number" min="0" step="1" id="product-quantity" name="product-quantity" 
+                    value="<?= htmlspecialchars($row['quantity']) ?>" placeholder="10"
+                >
+            </div>
+
+            <div class="form-field">
+                <label class="form-label" for="product-price" >Hinta</label>
+                <input 
+                    class="form-input" type="number" min="0" step="0.01" id="product-price" name="product-price" 
+                    value="<?= htmlspecialchars($row['price']) ?>" placeholder="12.50"
+                >
+            </div>
 
         <div class="form-field">
             <label class="form-label" for="product-desc" >Tuotteen kuvaus</label>

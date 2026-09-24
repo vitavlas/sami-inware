@@ -29,6 +29,11 @@ function validateInput(array $patterns, array $data): array {
                     $errors[] = $message;
                 }
                 break;
+            case "in_array":
+                if (!in_array($value, $rule)) {
+                    $errors[] = $message;
+                }
+                break;
         }
     }
 
