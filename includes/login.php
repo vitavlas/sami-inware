@@ -45,25 +45,6 @@
     } else {
         $error_msg = 'Käyttäjätunnusta ei löytynyt!';
     }
-
-
-    // $patterns = [
-    //     'username' => [
-    //         'label' => 'Käyttäjätunnus',
-    //         'type' => 'regex',
-    //         'rule' => '/^[a-zA-Z0-9 \-]+$/',
-    //         'message' => 'Käyttäjätunnus ei kelpaa',
-    //     ],
-    //     'password' => [
-    //         'label' => 'Salasana',
-    //         'type' => 'regex',
-    //         'rule' => '/^(?!\s*$).+/',
-    //         'message' => 'Salasana ei kelpaa',
-    //     ],
-    // ];
-
-    // $sanitized = sanitizeInput($input_data);
-    // $validated = validateInput($patterns, $sanitized);
 ?>
 
 <?php
@@ -76,7 +57,7 @@
 
     <main class="auth">
         <section class="auth-card">
-            <a href="#!" class="logo">
+            <a href="index.php" class="logo">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="warehouse"><polygon fill="#801b5d" points="16 1.9 2 8.36 2 30 30 30 30 8.36 16 1.9"></polygon><rect width="20" height="6" x="6" y="24" fill="#fff"></rect><rect width="20" height="6" x="6" y="18" fill="#d9dce1"></rect><rect width="20" height="6" x="6" y="12" fill="#fff"></rect></svg>
                 <span>InWare</span>
             </a>
@@ -86,7 +67,9 @@
             <?php if (!empty($error_msg)): ?>
 
             <div class="alert alert-error">
-                <p><i class="fa-solid fa-circle-info"></i> <?= $error_msg ?></p>
+                <div class="alert-inner">
+                    <p><i class="fa-solid fa-circle-info"></i> <?= $error_msg ?></p>
+                </div>
             </div>
 
             <?php endif; ?>

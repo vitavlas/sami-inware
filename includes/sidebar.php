@@ -22,8 +22,8 @@
   <?php if (!empty($_SESSION['user_name'])): ?>
 
   <div class="sidebar-footer">
-    <form class="logout-form" action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=logout" method="POST" name="form-logout">
-        <p>Kirjautunut: <?= $_SESSION['user_name'] ?></p>
+    <form class="user-panel" action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=logout" method="POST" name="form-logout">
+        <span class="user-info">Kirjautunut: <?= $_SESSION['user_name'] ?></span>
         <button class="action-button" type="submit">Kirjaudu ulos</button>
     </form>
   </div>

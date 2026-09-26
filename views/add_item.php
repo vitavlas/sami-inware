@@ -95,9 +95,11 @@ if($validated['isValid']):
     <?php if (!empty($validated['errors'])): ?>
 
     <div class="alert alert-error">
-        <?php foreach ($validated['errors'] as $error_msg): ?>
-        <p><i class="fa-solid fa-circle-info"></i> <?= htmlspecialchars($error_msg) ?></p>
-        <?php endforeach; ?>
+        <div class="alert-inner">
+            <?php foreach ($validated['errors'] as $error_msg): ?>
+            <p class="alert-message"><i class="fa-solid fa-circle-info"></i> <?= htmlspecialchars($error_msg) ?></p>
+            <?php endforeach; ?>
+        </div>
     </div>
 
     <?php endif; ?>
@@ -113,13 +115,13 @@ if($validated['isValid']):
                 <label class="form-label" for="product-name" >Tuote</label>
                 <input 
                     class="form-input" type="text" id="product-name" name="product-name" 
-                    value="<?= htmlspecialchars($_POST['product-name'] ?? '') ?>" placeholder="Uusi tuote"
+                    value="<?= htmlspecialchars($_POST['product-name'] ?? '') ?>" placeholder="Uusi tuote" required
                 >
             </div>
 
             <div class="form-field">
                 <label class="form-label" for="product-category" >Kategoria</label>
-                <select class="form-input" name="product-category" id="product-category">
+                <select class="form-input" name="product-category" id="product-category" required>
                     <option value="" selected disabled>Valitse kategoria</option>
                     <option value="Metallimateriaalit">Metallimateriaalit</option>
                     <option value="Rakennustarvikkeet">Rakennustarvikkeet</option>
@@ -133,7 +135,7 @@ if($validated['isValid']):
                 <label class="form-label" for="product-name" >Määrä</label>
                 <input 
                     class="form-input" type="number" min="0" step="1" id="product-quantity" name="product-quantity" 
-                    value="<?= htmlspecialchars($_POST['product-quantity'] ?? '') ?>" placeholder="10"
+                    value="<?= htmlspecialchars($_POST['product-quantity'] ?? '') ?>" placeholder="10" required
                 >
             </div>
 
@@ -141,13 +143,13 @@ if($validated['isValid']):
                 <label class="form-label" for="product-price" >Hinta</label>
                 <input 
                     class="form-input" type="number" min="0" step="0.01" id="product-price" name="product-price" 
-                    value="<?= htmlspecialchars($_POST['product-price'] ?? '') ?>" placeholder="12.50"
+                    value="<?= htmlspecialchars($_POST['product-price'] ?? '') ?>" placeholder="12.50" required
                 >
             </div>
     
             <div class="form-field">
                 <label class="form-label" for="product-desc" >Tuotteen kuvaus</label>
-                <textarea class="form-textarea" id="product-desc" name="product-desc" placeholder="Kuvaa tuotetta..."
+                <textarea class="form-textarea" id="product-desc" name="product-desc" placeholder="Kuvaa tuotetta..." required
                 ><?= htmlspecialchars($_POST['product-desc'] ?? '') ?></textarea>
             </div>
     

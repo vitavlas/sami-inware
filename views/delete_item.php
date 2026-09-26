@@ -44,12 +44,12 @@ if (mysqli_num_rows($result) > 0):
     $row = mysqli_fetch_assoc($result);
 ?>
 
-    <h2 class="section-title"><?= htmlspecialchars($row['name']) ?> [ Poistaminen ]</h2>
+    <h2 class="section-title"><?= htmlspecialchars($row['name']) ?> [ poistaminen ]</h2>
 
     <!-- Form -->
     <div class="form-wrapper">
         <form action="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?page=delete-item&product-id=<?= $product_id ?>" method="POST" name="delete_product">
-            <p>Poistetaan tuotteen <strong><?= $row['name'] ?></strong>? Toimintoa ei voi perua.</p>
+            <p>Poistetaan tuotteen <em><?= $row['name'] ?></em>? <span class="alert-error">Toimintoa ei voi perua!</span></p>
 
             <input type="hidden" name="product-id" value="<?= htmlspecialchars($product_id) ?>">
 

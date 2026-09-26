@@ -100,9 +100,11 @@ if($validated['isValid']):
     <?php if (!empty($validated['errors'])): ?>
 
     <div class="alert alert-error">
-        <?php foreach ($validated['errors'] as $error_msg): ?>
-        <p><i class="fa-solid fa-circle-info"></i> <?= htmlspecialchars($error_msg) ?></p>
-        <?php endforeach; ?>
+        <div class="alert-inner">
+            <?php foreach ($validated['errors'] as $error_msg): ?>
+            <p class="alert-message"><i class="fa-solid fa-circle-info"></i> <?= htmlspecialchars($error_msg) ?></p>
+            <?php endforeach; ?>
+        </div>
     </div>
 
     <?php endif; ?>
@@ -136,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
             <label class="form-label" for="product-name" >Tuote</label>
             <input 
                 class="form-input" type="text" id="product-name" name="product-name" 
-                value="<?= htmlspecialchars($row['name']) ?>"
+                value="<?= htmlspecialchars($row['name']) ?>" 
             >
         </div>
 

@@ -114,17 +114,23 @@ body {
 /* Footer */
 
 .footer {
+  padding: 1rem;
   background-color: var(--primary-dark);
   color: var(--text-light);
+  font-weight: 300;
 }
 
 .footer-inner {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
-  background-color: var(--text-secondary);
-  color: var(--bg-primary);
+  gap: 1rem;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 /* ===== Content ===== */
@@ -147,7 +153,7 @@ body {
 }
 
 .action-button {
-   display: inline-flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
@@ -358,11 +364,15 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: max(250px, 50%);
+  width: min(700px, 100%);
   margin-block: 2rem;
   padding: 1rem;
   border: 1px solid var(--text-dark);
   border-radius: 0.5rem;
+}
+
+.alert-inner {
+  width: fit-content;
 }
 
 .alert-error {
@@ -373,11 +383,19 @@ body {
   color: var(--color-success);
 }
 
+.alert-message {
+  width: 100%;
+  margin: 0.5rem 0;
+  text-align: left;
+}
+
 /* ===== Forms ===== */
+
+/* General form */
 
 .form-wrapper {
   width: 100%;
-  max-width: 800px;
+  max-width: 700px;
 }
 
 .form-field {
@@ -393,6 +411,7 @@ body {
 
 .form-input,
 .form-textarea {
+  width: 100%;
   padding: 1rem;
   background-color: #fff;
   border: 2px solid var(--text-dark);
@@ -410,19 +429,13 @@ body {
   }
 }
 
-.form-input {
-  min-width: 250px;
-  max-width: 50%;
-}
-
 .form-textarea {
-  width: 100%;
   min-height: 150px;
+  resize: vertical;
 }
 
 .form-button {
-  width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem 1.5rem;
   font-size: clamp(1rem, 0.964rem + 0.18vw, 1.1rem);
   font-weight: 600;
   color: inherit;
@@ -448,6 +461,19 @@ body {
 .form-button--alert:hover {
   background-color: var(--color-error);
   color: var(--text-light);
+}
+
+/* Logout info in sidebar */
+
+.user-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user-panel > .user-info {
+  color: var(--text-light);
+  font-weight: 300;
 }
 
 /* ===== Login Page ===== */
