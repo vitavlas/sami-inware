@@ -6,7 +6,7 @@ $result = mysqli_query($conn, $query);
 $product_count = mysqli_fetch_assoc($result)['product_count'];
 
 // Category count
-$query = "SELECT COUNT(DISTINCT category) AS category_count FROM products";
+$query = "SELECT COUNT(*) AS category_count FROM categories";
 $result = mysqli_query($conn, $query);
 $category_count = mysqli_fetch_assoc($result)['category_count'];
 
@@ -16,7 +16,7 @@ $result = mysqli_query($conn, $query);
 $product_low_stock = mysqli_fetch_assoc($result)['product_low_stock'];
 
 // All products from DB
-$query = "SELECT * FROM products";
+$query = "SELECT p.id, p.name, c.name AS category, p.quantity, p.price FROM products AS p JOIN categories AS c ON p.category_id = c.id ORDER BY p.id";
 $result = mysqli_query($conn, $query);
 
 ?>
@@ -63,8 +63,8 @@ $result = mysqli_query($conn, $query);
                     <td class="table-column"><?= htmlspecialchars($row['name']) ?></td>
                     <td class="table-column"><?= htmlspecialchars($row['category']) ?></td>
                     <td class="table-column"><span class="status"><?= htmlspecialchars($row['quantity']) ?></span></td>
-                    <td class="table-column">&euro; <?= htmlspecialchars($row['price']) ?></td>
-                    <td class="table-column"><a href="index.php?page=view-product&product-id=<?= htmlspecialchars($row['id']) ?>" class="action-link">Näytä</a></td>
+                    <td class="table-column">&euro; <?= htmlspecialchars(number_format($row['price'], 2, ',', ' ')) ?></td>
+                    <td class="table-column"><a href="index.php?page=view-product&product-id=<?= $row['id'] ?>" class="action-link">Näytä</a></td>
                 </tr>
             <?php endwhile; ?>
             <?php else: ?>

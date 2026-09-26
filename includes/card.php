@@ -51,11 +51,11 @@ $formatted_date_updated = $date_updated->format('d.m.Y');
         <?php if (($_SESSION['user_role'] ?? '') === 'admin'): ?>
 
         <div class="card-actions">
-            <a class="action-link" href="index.php?page=update-item&product-id=<?= htmlspecialchars($row['id']) ?>">
+            <a class="action-link" href="index.php?page=update-item&product-id=<?= $row['id'] ?>">
                 <i class="fa-regular fa-pen-to-square"></i>
                  Muokkaa
             </a>
-            <a class="action-link action-link--alert" href="index.php?page=delete-item&product-id=<?= htmlspecialchars($row['id']) ?>">
+            <a class="action-link action-link--alert" href="index.php?page=delete-item&product-id=<?= $row['id'] ?>">
                 <i class="fa-regular fa-trash-can"></i>
                  Poista
             </a>

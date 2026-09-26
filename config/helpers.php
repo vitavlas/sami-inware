@@ -25,14 +25,17 @@ function validateInput(array $patterns, array $data): array {
                 }
                 break;
             case "filter":
-                if (!filter_var($value, $rule)) {
+                if (filter_var($value, $rule) === false) {
                     $errors[] = $message;
                 }
                 break;
             case "in_array":
-                if (!in_array($value, $rule)) {
+                if (!in_array($value, $rule, true)) {
                     $errors[] = $message;
                 }
+                break;
+            default:
+                $errors[] = "Unknown validation type: {$type}";
                 break;
         }
     }

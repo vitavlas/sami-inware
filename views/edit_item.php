@@ -1,12 +1,12 @@
 <?php
-// FIXME: create DB table!
-$categories_allowed = [
-    'Metallimateriaalit',
-    'Rakennustarvikkeet',
-    'Työturvallisuus',
-    'Toimistotekniikka',
-    'Toimisto',
-];
+// Product categories
+$query = "SELECT id, name FROM categories ORDER BY name";
+$result = mysqli_query($conn, $query);
+$categories_allowed = [];
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $categories_allowed[] = $row;
+}
 ?>
 
 <section>
@@ -16,11 +16,11 @@ $categories_allowed = [
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'):
     // Validate form inputs
-      $input_data = [
+         $input_data = [
         'name' => $_POST['product-name'] ?: '',
         'category' => $_POST['product-category'] ?? '',
-        'quantity' => (int) $_POST['product-quantity'] ?: '',
-        'price' => (float) str_replace(',', '.', $_POST['product-price']) ?: '',
+        'quantity' => $_POST['product-quantity'] ?: '',
+        'price' => str_replace(',', '.', $_POST['product-price']) ?: '',
         'desc' => $_POST['product-desc'] ?: '',
     ];
 
@@ -29,13 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
             'label' => 'Tuote',
             'type' => 'regex',
             'rule' => '/^[\p{L}0-9 \-]+$/u',
-            'message' => 'Tuotenimi ei voi olla tyhjä',
+            'message' => 'Tuotenimi sisältää kiellettyjä merkkejä tai tyhjä',
         ],
         'category' => [
             'label' => 'Kategoria',
-            'type' => 'in_array',
-            'rule' => $categories_allowed,
-            'message' => 'Väärä kategoria',
+            'type' => 'filter',
+            'rule' => FILTER_VALIDATE_INT,
+            'message' => 'Valittu väärä kategoria',
         ],
         'quantity' => [
             'label' => 'Määrä',
@@ -70,14 +70,14 @@ if($validated['isValid']):
     // Update post
     $product_id = (int) $_POST['product-id'];
     $product_name = $validated["data"]["name"];
-    $product_category = $validated["data"]["category"];
-    $product_quantity = $validated["data"]["quantity"];
-    $product_price = $validated["data"]["price"];
+    $product_category = (int) $validated["data"]["category"];
+    $product_quantity = (int) $validated["data"]["quantity"];
+    $product_price = (float) $validated["data"]["price"];
     $product_desc = $validated["data"]["desc"];
 
-    $query = "UPDATE products SET name = ?, description = ?, category = ?, quantity = ?, price = ? WHERE id = ?";
+    $query = "UPDATE products SET name = ?, description = ?, category_id = ?, quantity = ?, price = ? WHERE id = ?";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "sssidi", $product_name, $product_desc, $product_category, $product_quantity, $product_price, $product_id);
+    mysqli_stmt_bind_param($stmt, "ssiidi", $product_name, $product_desc, $product_category, $product_quantity, $product_price, $product_id);
 
     if (mysqli_stmt_execute($stmt)):
         $_POST = [];
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
     // Get requested post data
     $product_id = (int) $_GET['product-id'];
     
-    $query = "SELECT * FROM products WHERE id = ?";
+    $query = "SELECT p.id, p.name, p.category_id, c.name AS category, p.description, p.quantity, p.price, p.created_at, p.updated_at FROM products AS p JOIN categories AS c ON p.category_id = c.id WHERE p.id = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "i", $product_id);
     mysqli_stmt_execute($stmt);
@@ -145,25 +145,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
                     <div class="form-field">
                 <label class="form-label" for="product-category" >Kategoria</label>
 
-                <?php if (in_array($row['category'], $categories_allowed)): ?>
-                
                     <select class="form-input" name="product-category" id="product-category">
 
                          <option value="" disabled>Valitse kategoria</option>
 
     <?php foreach ($categories_allowed as $category): ?>
-
+        
         <option
-            value="<?= htmlspecialchars($category) ?>"
-            <?= $row['category'] === $category ? 'selected' : '' ?>
+            value="<?= $category['id'] ?>"
+            <?= (int) $row['category_id'] === (int) $category['id'] ? 'selected' : '' ?>
         >
-            <?= htmlspecialchars($category) ?>
+            <?= htmlspecialchars($category['name']) ?>
         </option>
 
     <?php endforeach; ?>
 
                     </select>
-                <?php endif; ?>
 
             </div>
 
