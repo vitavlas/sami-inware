@@ -1,20 +1,34 @@
 <?php
+// Getting product id
+// FIXME: 0 -> delete ?
+$product_id = (int) ($_GET['product-id'] ?? $_POST['product-id'] ?? 0);
+
 // Product categories
+$categories_allowed = [];
+
 $query = "SELECT id, name FROM categories ORDER BY name";
 $result = mysqli_query($conn, $query);
-$categories_allowed = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
     $categories_allowed[] = $row;
 }
-?>
 
-<section>
+// Getting product data
+$query = "SELECT p.id, p.name, p.category_id, c.name AS category, p.description, p.quantity, p.price, p.created_at, p.updated_at FROM products AS p JOIN categories AS c ON p.category_id = c.id WHERE p.id = ?";
+$stmt = mysqli_prepare($conn, $query);
+mysqli_stmt_bind_param($stmt, "i", $product_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$row = mysqli_fetch_assoc($result);
+
+// Data after validation
+$validated = null;
+?>
 
 <?php
 /* ===== UPDATE product info ===== */ 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST'):
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate form inputs
          $input_data = [
         'name' => $_POST['product-name'] ?: '',
@@ -59,45 +73,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
 
     $sanitized = sanitizeInput($input_data);
     $validated = validateInput($patterns, $sanitized);
+
+    if ($validated['isValid']) {
+        // Update post
+        $product_name = $validated["data"]["name"];
+        $product_category = (int) $validated["data"]["category"];
+        $product_quantity = (int) $validated["data"]["quantity"];
+        $product_price = (float) $validated["data"]["price"];
+        $product_desc = $validated["data"]["desc"];
+
+        $query = "UPDATE products SET name = ?, description = ?, category_id = ?, quantity = ?, price = ? WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, "ssiidi", $product_name, $product_desc, $product_category, $product_quantity, $product_price, $product_id);
+
+        if (mysqli_stmt_execute($stmt)) {
+            $success = true;
+
+            // FIXME: $row needed ?
+            // Update product data after UPDATE
+            $row['name'] = $product_name;
+            $row['category_id'] = $product_category;
+            $row['quantity'] = $product_quantity;
+            $row['price'] = $product_price;
+            $row['description'] = $product_desc;
+        } else {
+            $success = false;
+        }
+    }
+}
 ?>
 
-    <h2 class="section-title"><?= htmlspecialchars($validated["data"]["name"]) ?> [ muokkaus tila ]</h2>
+<?php if ($row): ?>
 
-<!-- Form send status messages -->
 
-<?php
-if($validated['isValid']):
-    // Update post
-    $product_id = (int) $_POST['product-id'];
-    $product_name = $validated["data"]["name"];
-    $product_category = (int) $validated["data"]["category"];
-    $product_quantity = (int) $validated["data"]["quantity"];
-    $product_price = (float) $validated["data"]["price"];
-    $product_desc = $validated["data"]["desc"];
+<section>
 
-    $query = "UPDATE products SET name = ?, description = ?, category_id = ?, quantity = ?, price = ? WHERE id = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssiidi", $product_name, $product_desc, $product_category, $product_quantity, $product_price, $product_id);
+    <h2 class="section-title"><?= htmlspecialchars($row['name']) ?> [ muokkaus tila ]</h2>
 
-    if (mysqli_stmt_execute($stmt)):
-        $_POST = [];
-?>
+    <?php if ($validated && !$validated['isValid']:) ?>
 
-    <div class="alert alert-success">
-        <p>Tuotetiedot päivitetty!</p>
-    </div>
-
-    <?php else: ?>
-
-    <div class="alert alert-error">
-        <p>Tuotteen päivittäminen epäonnistui. Yritä uudelleen.</p>
-    </div>
-
-    <?php endif; ?>
-
-<?php else: ?>
-
-    <?php if (!empty($validated['errors'])): ?>
+    <!-- Form send status messages -->
 
     <div class="alert alert-error">
         <div class="alert-inner">
@@ -108,27 +123,19 @@ if($validated['isValid']):
     </div>
 
     <?php endif; ?>
-    
-<?php endif; ?>
-<?php endif; ?>
 
-<?php
-/* ===== DISPLAY product info ===== */ 
+    <?php if ($success ?? false): ?>
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET'):
-    // Get requested post data
-    $product_id = (int) $_GET['product-id'];
+        <div class="alert alert-success">
+            <p>Tuotetiedot päivitetty!</p>
+        </div>
     
-    $query = "SELECT p.id, p.name, p.category_id, c.name AS category, p.description, p.quantity, p.price, p.created_at, p.updated_at FROM products AS p JOIN categories AS c ON p.category_id = c.id WHERE p.id = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $product_id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    
-    if ($row = mysqli_fetch_assoc($result)):
-?>
+    <?php endif; ?>
 
-    <h2 class="section-title"><?= htmlspecialchars($row['name']) ?> [ muokkaus tila ]</h2>
+    <!-- <div class="alert alert-error">
+        <p>Tuotteen päivittäminen epäonnistui. Yritä uudelleen.</p>
+    </div> -->
+
 
 <!-- Form -->
  
@@ -138,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
             <label class="form-label" for="product-name" >Tuote</label>
             <input 
                 class="form-input" type="text" id="product-name" name="product-name" 
-                value="<?= htmlspecialchars($row['name']) ?>" 
+                value="<?= htmlspecialchars($row['name'] ?? $validated['data']['name']) ?>" 
             >
         </div>
 
@@ -149,11 +156,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
 
                          <option value="" disabled>Valitse kategoria</option>
 
+                         <?php $current_category_id = (int) ($validated['data']['category'] ?? $row['category_id']); ?>
+
     <?php foreach ($categories_allowed as $category): ?>
         
         <option
             value="<?= $category['id'] ?>"
-            <?= (int) $row['category_id'] === (int) $category['id'] ? 'selected' : '' ?>
+            <?= $current_category_id === (int) $category['id'] ? 'selected' : '' ?>
         >
             <?= htmlspecialchars($category['name']) ?>
         </option>
@@ -168,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
                 <label class="form-label" for="product-name" >Määrä</label>
                 <input 
                     class="form-input" type="number" min="0" step="1" id="product-quantity" name="product-quantity" 
-                    value="<?= htmlspecialchars($row['quantity']) ?>" placeholder="10"
+                    value="<?= htmlspecialchars($row['quantity'] ?? $validated['data']['quantity']) ?>" placeholder="10"
                 >
             </div>
 
@@ -176,26 +185,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'):
                 <label class="form-label" for="product-price" >Hinta</label>
                 <input 
                     class="form-input" type="number" min="0" step="0.01" id="product-price" name="product-price" 
-                    value="<?= htmlspecialchars($row['price']) ?>" placeholder="12.50"
+                    value="<?= htmlspecialchars($row['price'] ?? $validated['data']['price']) ?>" placeholder="12.50"
                 >
             </div>
 
         <div class="form-field">
             <label class="form-label" for="product-desc" >Tuotteen kuvaus</label>
             <textarea class="form-textarea" id="product-desc" name="product-desc"
-            ><?= htmlspecialchars($row['description']) ?></textarea>
+            ><?= htmlspecialchars($row['description'] ?? $validated['data']['desc']) ?></textarea>
         </div>
 
-        <input type="hidden" name="product-id" value="<?= htmlspecialchars($row['id']) ?>">
+        <input type="hidden" name="product-id" value="<?= $row['id'] ?>">
 
         <button class="form-button" type="submit" >Päivitä</button>
     </form>
 </div>
 
 <?php
-    else:
-        echo "<p>Hakemaasi tuotetta ei löytynyt!</p>";
-    endif;
+//     else:
+//         echo "<p>Hakemaasi tuotetta ei löytynyt!</p>";
+//     endif;
+// endif;
+
 endif;
 ?>
 
