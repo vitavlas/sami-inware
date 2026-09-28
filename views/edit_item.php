@@ -132,15 +132,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php endif; ?>
 
-    <?php if ($success ?? false): ?>
+    <?php if ($validated && $success): ?>
 
         <div class="alert alert-success">
             <p>Tuotetiedot päivitetty!</p>
         </div>
-    
+
+    <?php elseif ($validated && !$success): ?>
+
+        <div class="alert alert-error">
+            <p>Tuotteen päivittäminen epäonnistui. Yritä uudelleen.</p>
+        </div>
+
     <?php endif; ?>
-
-
+    
 <!-- Form -->
  
 <div class="form-wrapper">
