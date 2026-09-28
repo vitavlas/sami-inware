@@ -55,9 +55,11 @@ function validateInput(array $patterns, array $data): array {
 function sanitizeInput(array $data): array {
     foreach ($data as $field => $value) {
         // delete spaces at the begin and end of the string
-        $data[$field] = trim($value);
+        $value = trim($value);
         // delete excess spaces inside the string
-        $data[$field] = preg_replace('/\s+/', ' ', $value);
+        $value = preg_replace('/\s+/', ' ', $value);
+
+        $data[$field] = $value;
     }
 
     return $data;

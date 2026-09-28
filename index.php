@@ -21,7 +21,7 @@ require_once BASE_PATH . '/config/database.php';
 
 if (!isset($routes[$page])) {
     http_response_code(404);
-    // FIXME:
+    // FIXME: develop real page
     echo 'Page not found 404';
     exit;
 }
@@ -38,7 +38,7 @@ if (!$routes[$page]['public'] && empty($_SESSION['user_name'])) {
 
 if ($routes[$page]['role'] !== null && ($_SESSION['user_role'] ?? '') !== $routes[$page]['role']) {
     http_response_code(403);
-    // FIXME:
+    // FIXME: develop real page
     echo 'Authorization denied';
     exit;
 }

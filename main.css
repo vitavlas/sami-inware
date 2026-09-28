@@ -267,7 +267,7 @@ body {
   font-size: clamp(1rem, 0.964rem + 0.18vw, 1.1rem);
   font-weight: 500;
   text-decoration: none;
-  color: var(--text-primary);
+  color: var(--text-dark);
   background-color: var(--accent-orange);
   border-radius: 0.5rem;
   transition:
@@ -297,7 +297,6 @@ body {
   flex-direction: column;
   gap: 2rem;
   padding: 1rem;
-  border: 1px solid var(--bg-secondary);
   border-radius: 0.5rem;
 }
 
@@ -344,7 +343,7 @@ body {
   max-width: 300px;
   margin-bottom: 2rem;
   padding: 1rem 0.5rem;
-  background-color: var(--text-muted);
+  background-color: var(--color-light);
   border-radius: 0.5rem;
 }
 

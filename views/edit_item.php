@@ -1,6 +1,7 @@
 <?php
-// Getting product id
-// FIXME: 0 -> delete ?
+/* ===== Preparing data ===== */ 
+
+// Product id
 $product_id = (int) ($_GET['product-id'] ?? $_POST['product-id'] ?? 0);
 
 // Product categories
@@ -13,7 +14,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $categories_allowed[] = $row;
 }
 
-// Getting product data
+// Product data
 $query = "SELECT p.id, p.name, p.category_id, c.name AS category, p.description, p.quantity, p.price, p.created_at, p.updated_at FROM products AS p JOIN categories AS c ON p.category_id = c.id WHERE p.id = ?";
 $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, "i", $product_id);
@@ -23,6 +24,14 @@ $row = mysqli_fetch_assoc($result);
 
 // Data after validation
 $validated = null;
+?>
+
+<?php
+/* ===== Product does not exist? ===== */ 
+
+if (mysqli_num_rows($result) === 0) {
+    echo "<p>Hakemaasi tuotetta ei löytynyt!</p>";
+}
 ?>
 
 <?php
@@ -75,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $validated = validateInput($patterns, $sanitized);
 
     if ($validated['isValid']) {
-        // Update post
+        // Update product
         $product_name = $validated["data"]["name"];
         $product_category = (int) $validated["data"]["category"];
         $product_quantity = (int) $validated["data"]["quantity"];
@@ -89,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (mysqli_stmt_execute($stmt)) {
             $success = true;
 
-            // FIXME: $row needed ?
             // Update product data after UPDATE
             $row['name'] = $product_name;
             $row['category_id'] = $product_category;
@@ -110,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <h2 class="section-title"><?= htmlspecialchars($row['name']) ?> [ muokkaus tila ]</h2>
 
-    <?php if ($validated && !$validated['isValid']:) ?>
+    <?php if ($validated && !$validated['isValid']): ?>
 
     <!-- Form send status messages -->
 
@@ -132,10 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     <?php endif; ?>
 
-    <!-- <div class="alert alert-error">
-        <p>Tuotteen päivittäminen epäonnistui. Yritä uudelleen.</p>
-    </div> -->
-
 
 <!-- Form -->
  
@@ -145,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label class="form-label" for="product-name" >Tuote</label>
             <input 
                 class="form-input" type="text" id="product-name" name="product-name" 
-                value="<?= htmlspecialchars($row['name'] ?? $validated['data']['name']) ?>" 
+                value="<?= htmlspecialchars($validated['data']['name'] ?? $row['name']) ?>" 
             >
         </div>
 
@@ -177,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label class="form-label" for="product-name" >Määrä</label>
                 <input 
                     class="form-input" type="number" min="0" step="1" id="product-quantity" name="product-quantity" 
-                    value="<?= htmlspecialchars($row['quantity'] ?? $validated['data']['quantity']) ?>" placeholder="10"
+                    value="<?= htmlspecialchars($validated['data']['quantity'] ?? $row['quantity']) ?>" placeholder="10"
                 >
             </div>
 
@@ -185,14 +189,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label class="form-label" for="product-price" >Hinta</label>
                 <input 
                     class="form-input" type="number" min="0" step="0.01" id="product-price" name="product-price" 
-                    value="<?= htmlspecialchars($row['price'] ?? $validated['data']['price']) ?>" placeholder="12.50"
+                    value="<?= htmlspecialchars($validated['data']['price'] ?? $row['price']) ?>" placeholder="12.50"
                 >
             </div>
 
         <div class="form-field">
             <label class="form-label" for="product-desc" >Tuotteen kuvaus</label>
             <textarea class="form-textarea" id="product-desc" name="product-desc"
-            ><?= htmlspecialchars($row['description'] ?? $validated['data']['desc']) ?></textarea>
+            ><?= htmlspecialchars($validated['data']['desc'] ?? $row['description']) ?></textarea>
         </div>
 
         <input type="hidden" name="product-id" value="<?= $row['id'] ?>">
@@ -201,13 +205,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </div>
 
-<?php
-//     else:
-//         echo "<p>Hakemaasi tuotetta ei löytynyt!</p>";
-//     endif;
-// endif;
-
-endif;
-?>
-
 </section>
+
+<?php endif; ?>
