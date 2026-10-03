@@ -6,7 +6,7 @@ The project was developed as a practical PHP learning project without any framew
 
 ## ✨ Features
 
-- Product management. (Add, edit, view, and delete products).
+- Product management. (Add, edit, view, and delete products)
 - Low-stock monitoring
 - Database design with MySQL table relationships using foreign keys
 - Simple URL-based routing
@@ -15,7 +15,7 @@ The project was developed as a practical PHP learning project without any framew
 - Error/success messages
 - Basic protection against SQL injection
 - User authentication
-- Different user roles. (Admin-only product modification and deletion).
+- Different user roles. (Admin-only product modification and deletion)
 
 ## 🧱 Project Structure
 
@@ -213,10 +213,10 @@ Update the database connection settings in config/database.php according to **yo
 
 The project can be run using a local environment such as WAMP.
 
-1. Clone the repository [https://github.com/vitavlas/sami-inware.git](https://github.com/vitavlas/sami-inware.git).
-2. Create a MySQL database named `inware`.
-3. Import the SQL file as described in **Settings → Database**.
-4. Open the project through your local web server.
+1. Clone the repository [https://github.com/vitavlas/sami-inware.git](https://github.com/vitavlas/sami-inware.git)
+2. Create a MySQL database named `inware`
+3. Import the SQL file as described in **Settings → Database**
+4. Open the project through your local web server
 
 ## 💡 Notes
 

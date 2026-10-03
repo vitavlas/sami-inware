@@ -6,7 +6,7 @@ Projekti on toteutettu käytännönläheisenä PHP-harjoitusprojektina ilman fra
 
 ## ✨ Ominaisuudet
 
-- Tuotteiden hallinta. (Tuotteiden lisääminen, muokkaaminen, tarkastelu ja poistaminen).
+- Tuotteiden hallinta. (Tuotteiden lisääminen, muokkaaminen, tarkastelu ja poistaminen)
 - Vähäisen varastomäärän seuranta
 - Relaatiotietokannan suunnittelu MySQL-taulujen ja foreign key -avainten avulla
 - Yksinkertainen URL-pohjainen reititys
@@ -15,7 +15,7 @@ Projekti on toteutettu käytännönläheisenä PHP-harjoitusprojektina ilman fra
 - Virhe- ja onnistumisviestit
 - Perussuojaus SQL-injektioita vastaan
 - Käyttäjien tunnistaminen
-- Eri käyttäjäroolit. (Vain ylläpitäjä voi muokata ja poistaa tuotteita).
+- Eri käyttäjäroolit. (Vain ylläpitäjä voi muokata ja poistaa tuotteita)
 
 ## 🧱 Projektin Rakenne
 
@@ -213,7 +213,7 @@ Päivitä config/database.php tiedoston tietokantayhteyden asetukset **oman** pa
 
 Projektiin voidaan tutustua paikallisen kehitysympäristön avulla, kuten WAMP.
 
-1. Kloonaa repositorio [https://github.com/vitavlas/sami-inware.git](https://github.com/vitavlas/sami-inware.git).
-2. Luo MySQL- tietokanta nimeltä `inware`.
-3. Tuo SQL- tiedosto kohdassa **Asetukset → Tietokanta** kuvatulla tavalla.
-4. Avaa projekti paikallisen web-palvelimesi kautta.
+1. Kloonaa repositorio [https://github.com/vitavlas/sami-inware.git](https://github.com/vitavlas/sami-inware.git)
+2. Luo MySQL- tietokanta nimeltä `inware`
+3. Tuo SQL- tiedosto kohdassa **Asetukset → Tietokanta** kuvatulla tavalla
+4. Avaa projekti paikallisen web-palvelimesi kautta
